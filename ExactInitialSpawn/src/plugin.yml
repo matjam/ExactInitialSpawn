@@ -1,0 +1,5 @@
+name: ExactInitialSpawn
+main: net.stupendous.exactinitialspawn.ExactInitialSpawnPlugin
+version: 1.0
+commands:
+  
