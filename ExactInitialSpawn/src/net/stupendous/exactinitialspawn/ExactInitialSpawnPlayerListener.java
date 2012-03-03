@@ -3,15 +3,13 @@ package net.stupendous.exactinitialspawn;
 import java.io.File;
 
 import net.stupendous.util.*;
-import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPreLoginEvent;
 
-public class ExactInitialSpawnPlayerListener extends PlayerListener {
+public class ExactInitialSpawnPlayerListener implements Listener {
 	protected final ExactInitialSpawnPlugin plugin;
 	protected final Log log;
 	
@@ -20,6 +18,7 @@ public class ExactInitialSpawnPlayerListener extends PlayerListener {
 		this.log = plugin.log;
 	}
 	
+	@EventHandler
 	public void onPlayerPreLogin(PlayerPreLoginEvent event) {
 		String playerName = event.getName();
 		
@@ -31,6 +30,7 @@ public class ExactInitialSpawnPlayerListener extends PlayerListener {
 		}
 	}
 	
+	@EventHandler
 	public void onPlayerJoin ( PlayerJoinEvent event ) {
 		String playerName = event.getPlayer().getName();
 		

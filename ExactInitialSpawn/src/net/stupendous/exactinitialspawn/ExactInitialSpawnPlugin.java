@@ -10,13 +10,17 @@ import java.util.Properties;
 import net.stupendous.util.Log;
 import net.stupendous.util.Util;
 
-import org.bukkit.command.CommandExecutor;
+import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
+import org.bukkit.event.EventException;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPreLoginEvent;
+
 
 public class ExactInitialSpawnPlugin extends JavaPlugin {
 	protected PluginDescriptionFile pdf = null;
@@ -46,9 +50,21 @@ public class ExactInitialSpawnPlugin extends JavaPlugin {
 
         playerListener = new ExactInitialSpawnPlayerListener(this);
         
+        EventExecutor ee = new EventExecutor() {
+			@Override
+			public void execute(Listener listener, Event event) throws EventException {
+				if(event instanceof PlayerJoinEvent) {
+					((ExactInitialSpawnPlayerListener) listener).onPlayerJoin((PlayerJoinEvent) event);
+				}
+				else if(event instanceof PlayerPreLoginEvent) {
+					((ExactInitialSpawnPlayerListener) listener).onPlayerPreLogin((PlayerPreLoginEvent) event);
+				}
+			}
+		};
+        
         PluginManager pm = getServer().getPluginManager();
-        pm.registerEvent(Event.Type.PLAYER_PRELOGIN, playerListener, Priority.Normal, this);
-        pm.registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
+        pm.registerEvent(PlayerPreLoginEvent.class, playerListener, EventPriority.NORMAL, ee, this);
+        pm.registerEvent(PlayerJoinEvent.class, playerListener, EventPriority.NORMAL, ee, this);
 
         log.info("Version %s enabled.", pdf.getVersion());
     }
